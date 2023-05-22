@@ -16,12 +16,17 @@ class EmployeeController extends Controller
         $pageTitle = 'Employee List';
 
         // RAW SQL QUERY
-        $employees = DB::select('
-            select *, employees.id as employee_id, positions.name as position_name
-            from employees
-            left join positions on employees.position_id = positions.id
-        ');
+//        $employees = DB::select('
+//            select *, employees.id as employee_id, positions.name as position_name
+//            from employees
+//            left join positions on employees.position_id = positions.id
+//        ');
 
+        // QUERY BUILDER
+        $employees = DB::table('employees')
+            ->select('*', 'employees.id as employee_id', 'positions.name as position_name')
+            ->leftJoin('positions', 'employees.position_id', '=', 'positions.id')
+            ->get();
 
         return view('employee.index', [
             'pageTitle' => $pageTitle,
@@ -36,7 +41,10 @@ class EmployeeController extends Controller
     {
         $pageTitle = 'Create Employee';
         // RAW SQL Query
-        $positions = DB::select('select * from positions');
+//        $positions = DB::select('select * from positions');
+
+        // QUERY BUILDER
+        $positions = DB::table('positions')->get();
 
         return view('employee.create', compact('pageTitle', 'positions'));
     }
@@ -84,12 +92,19 @@ class EmployeeController extends Controller
         $pageTitle = 'Employee Detail';
 
         // RAW SQL QUERY
-        $employee = collect(DB::select('
-            select *, employees.id as employee_id, positions.name as position_name
-            from employees
-            left join positions on employees.position_id = positions.id
-            where employees.id = ?
-        ', [$id]))->first();
+//        $employee = collect(DB::select('
+//            select *, employees.id as employee_id, positions.name as position_name
+//            from employees
+//            left join positions on employees.position_id = positions.id
+//            where employees.id = ?
+//        ', [$id]))->first();
+
+        // QUERY BUILDER
+        $employee = DB::table('employees')
+            ->select('*', 'employees.id as employee_id', 'positions.name as position_name')
+            ->leftJoin('positions', 'employees.position_id', '=', 'positions.id')
+            ->where('employees.id', $id)
+            ->first();
 
         return view('employee.show', compact('pageTitle', 'employee'));
     }

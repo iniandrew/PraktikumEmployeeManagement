@@ -48,6 +48,7 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Age</th>
+                <th>Position</th>
                 <th></th>
             </tr>
             </thead>
