@@ -114,7 +114,11 @@ class EmployeeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('employee.edit', [
+            'pageTitle' => 'Edit Employee',
+            'positions' => DB::table('positions')->get(),
+            'employee' => DB::table('employees')->where('id', $id)->first(),
+        ]);
     }
 
     /**
@@ -122,7 +126,37 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $messages = [
+            'required' => ':Attribute harus diisi.',
+            'email' => 'Isi :attribute dengan format yang benar',
+            'numeric' => 'Isi :attribute dengan angka',
+            'position.required' => 'Pilih salah satu :attribute'
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required|email',
+            'age' => 'required|numeric',
+            'position' => 'required|numeric',
+        ], $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // UPDATE QUERY
+        DB::table('employees')
+            ->where('id', $id)
+            ->update([
+                'firstname' => $request->firstName,
+                'lastname' => $request->lastName,
+                'email' => $request->email,
+                'age' => $request->age,
+                'position_id' => $request->position,
+            ]);
+
+        return redirect()->route('employees.index');
     }
 
     /**
