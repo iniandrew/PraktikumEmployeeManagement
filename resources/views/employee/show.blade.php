@@ -58,7 +58,7 @@
                 </div>
                 <div class="col-md-12 mb-3">
                     <label for="age" class="form-label">Position</label>
-                    <h5>{{ $employee->position_name }}</h5>
+                    <h5>{{ $employee->position->name }}</h5>
                 </div>
             </div>
             <hr>

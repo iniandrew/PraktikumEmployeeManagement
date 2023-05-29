@@ -78,8 +78,15 @@
                     <div class="col-md-12 mb-3">
                         <label for="position" class="form-label">Position</label>
                         <select name="position" id="position" class="form-select">
+                            @php
+                                $selected = "";
+                                if ($errors->any())
+                                    $selected = old('position');
+                                else
+                                    $selected = $employee->position_id;
+                            @endphp
                             @foreach ($positions as $position)
-                                <option value="{{ $position->id }}" {{ $employee->position_id == $position->id ? 'selected' : '' }}>{{ $position->code.' - '.$position->name }}</option>
+                                <option value="{{ $position->id }}" {{ $selected == $position->id ? 'selected' : '' }}>{{ $position->code.' - '.$position->name }}</option>
                             @endforeach
                         </select>
                         @error('position')
