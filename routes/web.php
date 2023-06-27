@@ -23,10 +23,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/home');
 
-Route::get('home', [HomeController::class, 'index'])->name('home');
-Route::get('profile', ProfileController::class)->name('profile');
-Route::resource('employees', EmployeeController::class);
-
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->group(function () {
+    Route::get('home', [HomeController::class, 'index'])->name('home');
+    Route::get('profile', ProfileController::class)->name('profile');
+    Route::resource('employees', EmployeeController::class);
+});
