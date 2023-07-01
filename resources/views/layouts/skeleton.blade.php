@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }} &mdash;  @if(isset($pageTitle)) {{ $pageTitle }} @endif</title>
+    <title>{{ config('app.name', 'Laravel') }} @if(isset($pageTitle)) &mdash; {{ $pageTitle }} @endif</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
