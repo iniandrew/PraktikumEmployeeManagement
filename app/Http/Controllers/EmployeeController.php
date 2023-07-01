@@ -6,7 +6,9 @@ use App\Models\Employee;
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class EmployeeController extends Controller
 {
@@ -141,12 +143,32 @@ class EmployeeController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        // Get File
+        $file = $request->file('cv');
+
         $employee = Employee::find($id);
         $employee->firstname = $request->firstName;
         $employee->lastname = $request->lastName;
         $employee->email = $request->email;
         $employee->age = $request->age;
         $employee->position_id = $request->position;
+
+        if ($employee->encrypted_filename != null) {
+            // Delete existing file
+            Storage::delete('public/files/'.$employee->encrypted_filename);
+        }
+
+        if ($file != null) {
+            $originalFilename = $file->getClientOriginalName();
+            $encryptedFilename = $file->hashName();
+
+            // Store File
+            $file->store('public/files');
+
+            $employee->original_filename = $originalFilename;
+            $employee->encrypted_filename = $encryptedFilename;
+        }
+
         $employee->save();
 
 
@@ -158,7 +180,13 @@ class EmployeeController extends Controller
      */
     public function destroy(string $id)
     {
-        Employee::find($id)->delete();
+        $employee = Employee::find($id);
+
+        if ($employee->encrypted_filename != null) {
+            Storage::delete('public/files/'.$employee->encrypted_filename);
+        }
+
+        $employee->delete();
 
         return redirect()->route('employees.index');
     }
