@@ -21,6 +21,7 @@
     @yield('app')
 </div>
 
+@include('sweetalert::alert')
 @stack('scripts')
 
 </body>

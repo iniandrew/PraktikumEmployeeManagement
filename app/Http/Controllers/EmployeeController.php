@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class EmployeeController extends Controller
 {
@@ -18,6 +19,8 @@ class EmployeeController extends Controller
     public function index()
     {
         $pageTitle = 'Employee List';
+
+        confirmDelete();
 
         return view('employee.index', [
             'pageTitle' => $pageTitle,
@@ -85,6 +88,8 @@ class EmployeeController extends Controller
         }
 
         $employee->save();
+
+        Alert::success('Added Successfully', 'Employee Data Added Successfully.');
 
         return redirect()->route('employees.index');
     }
@@ -168,6 +173,7 @@ class EmployeeController extends Controller
 
         $employee->save();
 
+        Alert::success('Changed Successfully', 'Employee Data Changed Successfully.');
 
         return redirect()->route('employees.index');
     }
@@ -184,6 +190,8 @@ class EmployeeController extends Controller
         }
 
         $employee->delete();
+
+        Alert::success('Deleted Successfully', 'Employee Data Deleted Successfully.');
 
         return redirect()->route('employees.index');
     }
