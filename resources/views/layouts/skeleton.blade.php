@@ -20,5 +20,8 @@
 <div id="app">
     @yield('app')
 </div>
+
+@stack('scripts')
+
 </body>
 </html>

@@ -19,11 +19,8 @@ class EmployeeController extends Controller
     {
         $pageTitle = 'Employee List';
 
-        $employees = Employee::all();
-
         return view('employee.index', [
             'pageTitle' => $pageTitle,
-            'employees' => $employees
         ]);
     }
 
@@ -200,6 +197,21 @@ class EmployeeController extends Controller
 
         if(Storage::exists($encryptedFilename)) {
             return Storage::download($encryptedFilename, $downloadFilename);
+        }
+    }
+
+
+    public function getData(Request $request)
+    {
+        $employees = Employee::with('position');
+
+        if ($request->ajax()) {
+            return datatables()->of($employees)
+                ->addIndexColumn()
+                ->addColumn('actions', function($employee) {
+                    return view('employee.actions', compact('employee'));
+                })
+                ->toJson();
         }
     }
 }

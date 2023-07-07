@@ -31,8 +31,10 @@ Route::middleware('auth')->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('profile', ProfileController::class)->name('profile');
     Route::resource('employees', EmployeeController::class);
-    // Tambahkan route ini
+
     Route::get('download-file/{employeeId}', [EmployeeController::class, 'downloadFile'])->name('employees.downloadFile');
+    // tambahkan route ini
+    Route::get('getEmployees', [EmployeeController::class, 'getData'])->name('employees.getData');
 });
 
 Route::get('/local-disk', function() {
@@ -124,4 +126,3 @@ Route::get('/delete-public-file', function(Request $request) {
     Storage::disk('public')->delete('public-example.txt');
     return 'Deleted';
 });
-
